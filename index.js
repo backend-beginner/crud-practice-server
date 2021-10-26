@@ -1,6 +1,7 @@
 const express = require("express");
 const { MongoClient } = require("mongodb");
 const cors = require("cors");
+const { ObjectID } = require("bson");
 require("dotenv").config();
 
 const app = express();
@@ -23,7 +24,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    // console.log('Ping Ping Ping');
+    // console.log('Successfully Connected');
     const database = client.db("topClients");
     const commentsCollection = database.collection("comments");
 
@@ -33,11 +34,21 @@ async function run() {
       const comments = await cursor.toArray();
       res.send(comments);
     });
-    
+
+    //Get single comment in another dynamic route page
+    app.get("/comments/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log('Getting Single Comment', id);
+      // const query = { _id: ObjectId(id) };
+      const query = { _id: ObjectID(id) };
+      const comment = await commentsCollection.findOne(query);
+      res.json(comment);
+    })
+
     //POST API
     app.post("/comments", async (req, res) => {
       const comment = req.body;
-      // console.log("Ding Ding Ding", comment);
+      // console.log("Post Review", comment);
       const result = await commentsCollection.insertOne(comment);
       console.log(result);
       res.json(result);
