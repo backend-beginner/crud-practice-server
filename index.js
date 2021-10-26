@@ -40,6 +40,7 @@ async function run() {
       const id = req.params.id;
       console.log('Getting Single Comment', id);
       // const query = { _id: ObjectId(id) };
+      // Check above bson declaration
       const query = { _id: ObjectID(id) };
       const comment = await commentsCollection.findOne(query);
       res.json(comment);
@@ -53,6 +54,18 @@ async function run() {
       console.log(result);
       res.json(result);
     });
+
+    //Delete
+    app.delete("/comments/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log('Deleted Comment', id);
+      // const query = { _id: ObjectId(id) };
+      // Check above bson declaration
+      const query = { _id: ObjectID(id) };
+      const result = await commentsCollection.deleteOne(query);
+      res.json(result);
+    })
+    
   } finally {
     // await client.close();
   }
