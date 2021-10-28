@@ -60,7 +60,7 @@ async function run() {
       const id = req.params.id;
       console.log('Deleted Comment', id);
       // const query = { _id: ObjectId(id) };
-      // Check above bson declaration
+      // Check above that bson declaration
       const query = { _id: ObjectID(id) };
       const result = await commentsCollection.deleteOne(query);
       res.json(result);
@@ -79,3 +79,5 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log("Welcome to PORT", port);
 });
+
+//Heroku Deploy
